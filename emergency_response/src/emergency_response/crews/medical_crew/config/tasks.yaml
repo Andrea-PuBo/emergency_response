@@ -1,0 +1,48 @@
+tasks:
+  - name: analyse_emergency_details
+    agent: medical_coordinator_agent
+    description: >
+      Analyzes emergency details to determine medical resource needs,
+      including hospital assignments and rescue operations.
+    expected_output: >
+      A MedicalTaskAssignment object containing hospital assignments and medical tasks.
+
+  - name: load_hospitals
+    agent: medical_coordinator_agent
+    description: >
+      Parses hospital data from hospitals.json using the JSONReaderTool.
+      Validates the data and stores it in the crew's state.
+    tools:
+      - JSONReaderTool
+    expected_output: >
+      A HospitalsList object with id, x_coordinate, and y_coordinate.
+    output_pydantic:
+
+  - name: plan_transport_logistics
+    agent: ambulance_agent
+    description: >
+      Plans transport logistics for injured individuals, including assigning ambulances and routes.
+      Utilizes the RouteDistanceTool to determine optimal routes.
+    tools:
+      - RouteDistanceTool
+    expected_output: >
+      A TransportPlan object with ambulance assignments and optimal routes.
+
+  - name: plan_patient_care
+    agent: medical_agent
+    description: >
+      Plans patient care strategies, including stabilization and hospital notifications.
+    expected_output: >
+      A PatientCarePlan object containing stabilization strategies and hospital notifications.
+
+  - name: coordinate_transport_and_patient_care
+    agent: medical_coordinator_agent
+    description: >
+      Coordinates transport and patient care plans into a unified medical response strategy.
+    expected_output: >
+      A CoordinatedMedicalPlan object integrating transport and patient care plans.
+
+
+
+
+

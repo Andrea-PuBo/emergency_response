@@ -1,0 +1,51 @@
+tasks:
+  - name: analyse_emergency_details
+    agent: firefighting_coordinator_agent
+    description: >
+      Analyze the fire details from the emergency crew. Categorize the fire
+      and determine the type of response required for firefighting and rescue
+      agents. Fire type: {fire_type}, severity: {severity}.
+    tools:
+      - JSONParserTool
+    expected_output: >
+      A TaskAssignment object containing firefighting and rescue tasks, including assigned units.
+
+  - name: load_fire_trucks
+    agent: firefighting_coordinator_agent
+    description: >
+      Parses fire truck data from firetrucks.json using the JSONParserTool.
+    tools:
+      - JSONParserTool
+    expected_output: >
+      A FireTrucksList object with id, x_coordinate, and y_coordinate.
+
+  - name: develop_fire_suppression_plan
+    agent: firefighting_agent
+    description: >
+      Develop a fire suppression plan based on the fire type {fire_type} and
+      severity {severity}.
+      The plan includes tools and strategies for effectively suppressing the fire.
+    expected_output: >
+      A FireSuppressionPlan object containing tools and a suppression strategy.
+
+  - name: develop_rescue_plan
+    agent: rescue_agent
+    description: >
+      Develop a rescue plan for the fire event at ({x_location}, {y_location}).
+      Use the RouteDistanceTool to calculate evacuation routes and prioritize individuals
+      for rescue. For each individual at ({x_origin}, {y_origin}),
+      calculate the distance to the fire event.
+    tools:
+      - RouteDistanceTool
+    expected_output: >
+      A RescuePlan object with prioritized individuals and evacuation routes.
+
+  - name: coordinate_fire_suppression_and_rescue
+    agent: firefighting_coordinator_agent
+    description: >
+      Coordinate the fire suppression and rescue plans into a cohesive strategy.
+      Integrate the suppression plan for the fire event at ({x_location}, {y_location})
+      and the rescue priorities for nearby individuals.
+    expected_output: >
+      A CoordinatedPlan object integrating firefighting and rescue strategies.
+

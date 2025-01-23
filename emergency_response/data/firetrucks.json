@@ -1,0 +1,44 @@
+{
+    "fire_trucks": [
+      {
+        "id": "FT-1",
+        "X_coordinate": 1.24058,
+        "Y_coordinate": 41.10906
+      },
+      {
+        "id": "FT-2",
+        "X_coordinate": 1.25444,
+        "Y_coordinate": 41.11882
+      },
+      {
+        "id": "FT-3",
+        "X_coordinate": 1.24439,
+        "Y_coordinate": 41.13109
+      },
+      {
+        "id": "FT-4",
+        "X_coordinate": 1.23736,
+        "Y_coordinate": 41.12652
+      },
+      {
+        "id": "FT-5",
+        "X_coordinate": 1.27684,
+        "Y_coordinate": 41.12217
+      },
+      {
+        "id": "FT-6",
+        "X_coordinate": 1.25276,
+        "Y_coordinate": 41.13616
+      },
+      {
+        "id": "FT-7",
+        "X_coordinate": 1.24482,
+        "Y_coordinate": 41.11877
+      },
+      {
+        "id": "FT-8",
+        "X_coordinate": 1.24770,
+        "Y_coordinate": 41.11067
+      }
+    ]
+  }
