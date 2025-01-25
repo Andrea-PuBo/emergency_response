@@ -1,0 +1,17 @@
+provide_emergency_details:
+  description: >
+    Provide a emergency event summary from the report file {mdx_file} and parses it to a structured output.
+  expected_output: >
+    A summary of the fire report that includes all the details for the
+    emergency event along with the fire type, the x,y coordinates
+    of the fire location, the number of injured people and
+    the fire severity.
+  agent: coordinator
+
+
+
+
+
+
+
+

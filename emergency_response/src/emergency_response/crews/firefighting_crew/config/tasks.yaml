@@ -1,0 +1,16 @@
+analyse_firetrucks:
+  description: >
+    Read a list of firefighter units from the json file {json_file}.
+  expected_output: >
+    A structured output with a list of firetrucks with their unique id, the x_coordinate and y_coordinate
+  agent: analyser_agent
+
+assign_firetrucks:
+  description: >
+    Take the response from the analyser_agent.
+    For every unit of firetrucks in the updated list calculate its distance to the fire event using the RouteDistanceTool.
+    You should pass to the tool as x_origin, y_origin the coordinates of the firefighter unit and as x_destination, y_destination the coordinates of the fire event (x={x_location}, y={y_location}).
+    Return the id of the firetruck unit that has the smaller distance to the fire event and the distance computed with the RouteDistanceTool.
+  expected_output: >
+    A structured output with the selected id of the firetruck and the distance computed with the RouteDistanceTool
+  agent: rescue_agent
