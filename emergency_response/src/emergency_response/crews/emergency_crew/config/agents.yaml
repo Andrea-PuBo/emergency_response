@@ -1,8 +1,0 @@
-coordinator:
-  role: >
-    Coordinator
-  goal: >
-    Read a emergency event from an mdx file source and summarize it into a structured output.
-  backstory: >
-    The coordinator agent is responsible for reading the mdx file containing all details for the emergency incident
-    and provide a structured output with the x_coordinate, y_coordinate, injured people, fire type and severity
