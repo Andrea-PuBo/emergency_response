@@ -1,37 +1,15 @@
-tasks:
-  - name: receive_emergency_details
-    agent: emergency_agent
-    description: >
-      Parses emergency details (fire type, coordinates, severity, and injured individuals) from an MDX file using the MDXParserTool.
-    tools:
-      - MDXParserTool
-    expected_output: >
-      Parsed emergency details including fire type, severity, x coordinate, y coordinate, and number of injured individuals.
+provide_emergency_details:
+  description: >
+    Provide a emergency event summary from the report file {mdx_file} and parses it to a structured output.
+  expected_output: >
+    A summary of the fire report that includes all the details for the
+    emergency event along with the fire type, the x,y coordinates
+    of the fire location, the number of injured people and
+    the fire severity.
+  agent: coordinator
 
-  - name: analyse_incident
-    agent: emergency_agent
-    description: >
-      Analyzes the parsed emergency details to determine the crews to activate and prioritize tasks.
-      Evaluates fire severity and the number of injured individuals to decide whether to notify Firefighting
-      and/or Medical crews.
-    expected_output: >
-      A decision about which crews to activate based on the emergency details.
 
-  - name: notify_crews
-    agent: emergency_agent
-    description: >
-      Sends notifications to the Firefighting and Medical crews with the parsed emergency details.
-      Provides relevant task information and coordinates.
-    expected_output: >
-      Notifications sent to the Firefighting and Medical crews with instructions.
 
-  - name: finalize_plan
-    agent: emergency_agent
-    description: >
-      Summarizes the actions taken by the Firefighting and Medical crews.
-      Creates a final response plan based on the outcomes reported by the crews.
-    expected_output: >
-      A finalized response plan summarizing all crew activities and outcomes.
 
 
 

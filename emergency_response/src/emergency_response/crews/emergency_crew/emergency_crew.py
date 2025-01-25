@@ -1,9 +1,9 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 
-from emergency_response.src.emergency_response.tools.mdx_parser_tool import MDXParserTool
-from emergency_response.src.emergency_response.crews.emergency_crew.schemas.emergency_schemas import EmergencyDetails, IncidentAnalysis, CrewNotification, FinalPlan
-import json
+from ...tools.mdx_parser_tool import MDXParserTool
+from .schemas.emergency_schemas import EmergencyDetails
+
 
 
 @CrewBase
@@ -15,46 +15,21 @@ class EmergencyCrew:
 
     # Emergency Agent
     @agent
-    def emergency_agent(self) -> Agent:
-        """Emergency Agent."""
+    def coordinator(self) -> Agent:
         return Agent(
-            config=self.agents_config['emergency_agent'],
+            config=self.agents_config["coordinator"],
             tools=[MDXParserTool()],
             llm='ollama/llama3.1',
+            max_iter=2,
             verbose=True
         )
 
-    # Task Logic
+
     @task
-    def receive_emergency_details(self) -> Task:
-        """Coordinates fire suppression and rescue plans into a cohesive strategy."""
+    def provide_emergency_details(self) -> Task:
         return Task(
-            config=self.tasks_config["receive_emergency_details"],
+            config=self.tasks_config["provide_emergency_details"],
             output_pydantic=EmergencyDetails
-        )
-
-    @task
-    def analyse_incident(self) -> Task:
-        """Coordinates fire suppression and rescue plans into a cohesive strategy."""
-        return Task(
-            config=self.tasks_config["analyse_incident"],
-            output_pydantic=IncidentAnalysis
-        )
-
-    @task
-    def notify_crews(self) -> Task:
-        """Coordinates fire suppression and rescue plans into a cohesive strategy."""
-        return Task(
-            config=self.tasks_config["notify_crews"],
-            output_pydantic=CrewNotification
-        )
-
-    @task
-    def finalize_plan(self) -> Task:
-        """Coordinates fire suppression and rescue plans into a cohesive strategy."""
-        return Task(
-            config=self.tasks_config["finalize_plan"],
-            output_pydantic=FinalPlan
         )
 
 

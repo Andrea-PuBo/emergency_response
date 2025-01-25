@@ -1,11 +1,10 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+from crewai_tools.tools.file_read_tool.file_read_tool import FileReadTool
+from ...tools.route_distance_tool import RouteDistanceTool
 
-from emergency_response.src.emergency_response.tools.route_distance_tool import RouteDistanceTool
-from emergency_response.src.emergency_response.tools.json_parser_tool import JSONParserTool
-
-from emergency_response.src.emergency_response.crews.firefighting_crew.schemas.firefighting_schemas import TaskAssignment, FireSuppressionPlan, RescuePlan, CoordinatedPlan, FireTrucksList
-
+from .schemas.firefighting_schemas import FireTruck, FireTrucksList, SelectedFireTruck
+import os
 
 
 @CrewBase
@@ -15,25 +14,19 @@ class FirefightingCrew:
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
-    # Firefighting Coordinator Agent
-    @agent
-    def firefighting_coordinator_agent(self) -> Agent:
-        """Firefighting Coordinator Agent."""
-        return Agent(
-            config=self.agents_config['firefighting_coordinator_agent'],
-            llm='ollama/llama3.1',
-            tools=[JSONParserTool(json_file_type="fire_trucks")],
-            max_iter=3,
-            verbose=True
-        )
+    # Load environmental variables from .env file
 
-    # Firefighting Agent
+    firetrucks_path = os.getenv("FIRETRUCKS_PATH")
+    # Firefighting analyser Agent
+
     @agent
-    def firefighting_agent(self) -> Agent:
-        """Firefighting Agent."""
+    def analyser_agent(self) -> Agent:
+        """Firefighting analyser Agent."""
         return Agent(
-            config=self.agents_config['firefighting_agent'],
+            config=self.agents_config['analyser_agent'],
             llm='ollama/llama3.1',
+            tools=[FileReadTool(file_path=self.firetrucks_path)],
+            max_iter=2,
             verbose=True
         )
 
@@ -45,58 +38,35 @@ class FirefightingCrew:
             config=self.agents_config['rescue_agent'],
             llm='ollama/llama3.1',
             tools=[RouteDistanceTool()],
+            max_iter=2,
             verbose=True
         )
 
+
     # Task Logic
     @task
-    def analyse_emergency_details(self) -> Task:
-        """Analyzes fire details and assigns tasks to firefighting and rescue agents."""
+    def analyse_firetrucks(self) -> Task:
         return Task(
-            config=self.tasks_config["analyse_emergency_details"],
-            output_pydantic=TaskAssignment
-        )
-
-    @task
-    def load_fire_trucks(self) -> Task:
-
-        return Task(
-            config=self.tasks_config["load_fire_trucks"],
+            config=self.tasks_config["analyse_firetrucks"],
             output_pydantic=FireTrucksList
         )
 
-
     @task
-    def develop_fire_suppression_plan(self) -> Task:
-        """Develops a fire suppression plan based on fire type, severity, and location."""
+    def assign_firetrucks(self) -> Task:
+
         return Task(
-            config=self.tasks_config["develop_fire_suppression_plan"],
-            output_pydantic=FireSuppressionPlan
+            config=self.tasks_config["assign_firetrucks"],
+            output_pydantic=SelectedFireTruck
         )
 
-    @task
-    def develop_rescue_plan(self) -> Task:
-        """Develops a rescue plan including evacuation routes and priorities."""
-        return Task(
-            config=self.tasks_config["develop_rescue_plan"],
-            output_pydantic=RescuePlan
-        )
 
-    @task
-    def coordinate_fire_suppression_and_rescue(self) -> Task:
-        """Coordinates fire suppression and rescue plans into a cohesive strategy."""
-        return Task(
-            config=self.tasks_config["coordinate_fire_suppression_and_rescue"],
-            output_pydantic=CoordinatedPlan
-        )
 
     # Crew Definition
     @crew
     def crew(self) -> Crew:
-        """Creates the Firefighting Crew with hierarchical process."""
         return Crew(
             agents=self.agents,  # Automatically created by the @agent decorator
             tasks=self.tasks,  # Automatically created by the @task decorator
-            process=Process.hierarchical,  # Hierarchical process for Coordinator-led task execution
+            process=Process.sequential,
             verbose=True,
         )

@@ -1,20 +1,13 @@
-medical_coordinator_agent:
-  role: Facilitator
+analyser_agent:
+  role: Analyser
   goal: >
-    The Medical Coordinator Agent is responsible for managing tasks related to medical resources, including parsing hospital data and coordinating medical crew operations.
+    Read all the hospital units available from the given json file.
   backstory: >
-    The Medical Coordinator Agent manages the Medical Crew and ensures patients are routed to appropriate facilities for care.
+    The Analyser Agent reads all the hospital units available from a given json file, providing a list of units in the area.                                        
 
-ambulance_agent:
-  role: Collaborative
+rescue_agent:
+  role: Assigner
   goal: >
-    Plan the transport process for injured individuals, ensuring optimal routes and collaboration with Medical Agents during transit.
+    Plan safe evacuation routes and decide which hospital unit will be assigned given an emergency in case there is injured people.
   backstory: >
-    The Ambulance Agent works with the Medical Coordinator to develop efficient transport plans, ensuring injured individuals are taken to hospitals quickly and safely.
-
-medical_agent:
-  role: Collaborative
-  goal: >
-    Assess injured individuals, prepare stabilization and treatment plans, and notify receiving hospitals with critical information.
-  backstory: >
-    The Medical Agent ensures that injured individuals receive appropriate first aid and communicates their status to the receiving medical facility.
+    The Rescue Agent focuses on planning rescue operations, takes the list of available units, the data of the emergency event and decides which unit will respond to the event.

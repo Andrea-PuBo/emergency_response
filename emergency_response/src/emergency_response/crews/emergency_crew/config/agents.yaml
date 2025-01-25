@@ -1,6 +1,8 @@
-emergency_agent:
-  role: Facilitator
+coordinator:
+  role: >
+    Coordinator
   goal: >
-    Coordinate interactions between the firefighting and medical crews, ensuring the relevant teams receive emergency details, fire truck and hospital data and initiate response tasks.
+    Read a emergency event from an mdx file source and summarize it into a structured output.
   backstory: >
-    The Emergency Agent serves as the central point of communication, assessing incident details like fire type, severity, and injuries to distribute tasks efficiently.
+    The coordinator agent is responsible for reading the mdx file containing all details for the emergency incident
+    and provide a structured output with the x_coordinate, y_coordinate, injured people, fire type and severity
